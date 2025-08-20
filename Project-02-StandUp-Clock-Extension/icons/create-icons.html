@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Extension Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .icon-generator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .icon-preview {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .icon-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+        .icon-16 { width: 16px; height: 16px; font-size: 8px; }
+        .icon-32 { width: 32px; height: 32px; font-size: 16px; }
+        .icon-48 { width: 48px; height: 48px; font-size: 24px; }
+        .icon-128 { width: 128px; height: 128px; font-size: 64px; }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>StandUp Clock Extension Icons</h1>
+    
+    <div class="icon-generator">
+        <h2>Icon Previews (Convert to PNG)</h2>
+        <p>Right-click each icon and "Save as PNG" or take screenshots and resize:</p>
+        
+        <div class="icon-preview">
+            <div class="icon-content icon-16">⏰</div>
+            <div>16x16px</div>
+        </div>
+        
+        <div class="icon-preview">
+            <div class="icon-content icon-32">⏰</div>
+            <div>32x32px</div>
+        </div>
+        
+        <div class="icon-preview">
+            <div class="icon-content icon-48">⏰</div>
+            <div>48x48px</div>
+        </div>
+        
+        <div class="icon-preview">
+            <div class="icon-content icon-128">⏰</div>
+            <div>128x128px</div>
+        </div>
+    </div>
+    
+    <div class="instructions">
+        <h3>📝 How to Create Icons:</h3>
+        <ol>
+            <li><strong>Quick Method:</strong> Take screenshots of each icon above and save as PNG files</li>
+            <li><strong>Professional Method:</strong> Use tools like:
+                <ul>
+                    <li><strong>Canva:</strong> Create 128x128 design, then resize for other sizes</li>
+                    <li><strong>GIMP/Photoshop:</strong> Create vector-based icon with clock emoji</li>
+                    <li><strong>Online Icon Generator:</strong> Search "Chrome extension icon generator"</li>
+                    <li><strong>Figma:</strong> Create scalable icon design</li>
+                </ul>
+            </li>
+            <li><strong>File Names:</strong> Save as:
+                <ul>
+                    <li>icon16.png (16x16 pixels)</li>
+                    <li>icon32.png (32x32 pixels)</li>
+                    <li>icon48.png (48x48 pixels)</li>
+                    <li>icon128.png (128x128 pixels)</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>🎨 Design Guidelines:</h3>
+        <ul>
+            <li>Use the clock emoji (⏰) or a custom clock design</li>
+            <li>Use the gradient colors: #667eea to #764ba2</li>
+            <li>Keep it simple and recognizable at small sizes</li>
+            <li>Ensure good contrast and readability</li>
+        </ul>
+    </div>
+    
+    <script>
+        // Add right-click context menu for saving icons
+        document.querySelectorAll('.icon-content').forEach(icon => {
+            icon.addEventListener('contextmenu', (e) => {
+                console.log('Right-click to save icon as PNG');
+            });
+        });
+    </script>
+</body>
+</html>
