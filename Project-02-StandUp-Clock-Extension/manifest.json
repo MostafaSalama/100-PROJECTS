@@ -7,8 +7,7 @@
   "permissions": [
     "notifications",
     "alarms",
-    "storage",
-    "activeTab"
+    "storage"
   ],
   
   "background": {

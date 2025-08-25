@@ -96,28 +96,28 @@ class StandUpClockBackground {
     
     setupMessageListeners() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            switch (message.action) {
+        switch (message.action) {
                 case 'toggleReminders':
                     this.handleToggleReminders(message.isActive);
-                    break;
-                    
+                break;
+                
                 case 'updateInterval':
                     this.handleUpdateInterval(message.interval);
-                    break;
-                    
+                break;
+                
                 case 'snoozeReminders':
                     this.handleSnoozeReminders(message.snoozeUntil);
-                    break;
-                    
+                break;
+                
                 case 'recordStandUp':
                     this.handleRecordStandUp(message.timestamp);
-                    break;
-                    
+                break;
+                
                 case 'getStats':
                     sendResponse({ stats: this.stats });
-                    break;
-                    
-                default:
+                break;
+                
+            default:
                     break;
             }
             return true; // Keep message channel open for async responses
@@ -215,7 +215,7 @@ class StandUpClockBackground {
         
         try {
             await chrome.notifications.create('standupReminder', {
-                type: 'basic',
+            type: 'basic',
                 iconUrl: 'icons/icon128.png',
                 title: 'StandUp Clock Reminder',
                 message: randomMessage,
@@ -224,7 +224,7 @@ class StandUpClockBackground {
                     { title: 'Snooze 15min ⏰' }
                 ],
                 requireInteraction: true,
-                priority: 2
+            priority: 2
             });
             
             console.log('Notification shown');
