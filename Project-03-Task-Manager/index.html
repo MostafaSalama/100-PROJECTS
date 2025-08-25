@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMaster - Personal Task Management</title>
+    
+    <!-- CSS Architecture -->
+    <link rel="stylesheet" href="css/themes/main-theme.css">
+    <link rel="stylesheet" href="css/components/task-card.css">
+    <link rel="stylesheet" href="css/components/task-form.css">
+    <link rel="stylesheet" href="css/components/filters.css">
+    <link rel="stylesheet" href="css/components/statistics.css">
+    <link rel="stylesheet" href="css/components/modals.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="app-logo">
+                    <span class="logo-icon">✅</span>
+                    <h1 class="app-title">TaskMaster</h1>
+                    <span class="app-subtitle">Personal Task Management</span>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="exportBtn" title="Export Tasks">
+                        <span class="icon">📤</span>
+                        Export
+                    </button>
+                    <button class="btn btn-secondary" id="importBtn" title="Import Tasks">
+                        <span class="icon">📥</span>
+                        Import
+                    </button>
+                    <button class="btn btn-primary" id="addTaskBtn">
+                        <span class="icon">➕</span>
+                        Add Task
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Sidebar -->
+            <aside class="app-sidebar">
+                <div class="sidebar-section">
+                    <h3 class="section-title">Quick Stats</h3>
+                    <div class="stats-grid" id="statsContainer">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalTasks">0</div>
+                            <div class="stat-label">Total Tasks</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="completedTasks">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="pendingTasks">0</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="overdueTasks">0</div>
+                            <div class="stat-label">Overdue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="section-title">Filters & Search</h3>
+                    
+                    <div class="filter-group">
+                        <label for="searchInput" class="filter-label">Search Tasks</label>
+                        <div class="search-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="Search by title, tags, or description...">
+                            <span class="search-icon">🔍</span>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="statusFilter" class="filter-label">Status</label>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="priorityFilter" class="filter-label">Priority</label>
+                        <select id="priorityFilter" class="filter-select">
+                            <option value="all">All Priorities</option>
+                            <option value="high">High Priority</option>
+                            <option value="medium">Medium Priority</option>
+                            <option value="low">Low Priority</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="typeFilter" class="filter-label">Task Type</label>
+                        <select id="typeFilter" class="filter-select">
+                            <option value="all">All Types</option>
+                            <option value="work">Work</option>
+                            <option value="personal">Personal</option>
+                            <option value="project">Project</option>
+                            <option value="reminder">Reminder</option>
+                            <option value="meeting">Meeting</option>
+                            <option value="goal">Goal</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="dueDateFilter" class="filter-label">Due Date</label>
+                        <select id="dueDateFilter" class="filter-select">
+                            <option value="all">All Dates</option>
+                            <option value="today">Today</option>
+                            <option value="tomorrow">Tomorrow</option>
+                            <option value="this-week">This Week</option>
+                            <option value="next-week">Next Week</option>
+                            <option value="overdue">Overdue</option>
+                            <option value="no-date">No Due Date</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-outline btn-full-width" id="clearFiltersBtn">
+                        <span class="icon">🗑️</span>
+                        Clear Filters
+                    </button>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="section-title">Sort & View</h3>
+                    
+                    <div class="filter-group">
+                        <label for="sortBy" class="filter-label">Sort By</label>
+                        <select id="sortBy" class="filter-select">
+                            <option value="created-desc">Newest First</option>
+                            <option value="created-asc">Oldest First</option>
+                            <option value="priority-desc">Priority (High to Low)</option>
+                            <option value="priority-asc">Priority (Low to High)</option>
+                            <option value="due-date-asc">Due Date (Earliest)</option>
+                            <option value="due-date-desc">Due Date (Latest)</option>
+                            <option value="title-asc">Title (A-Z)</option>
+                            <option value="title-desc">Title (Z-A)</option>
+                            <option value="status-asc">Status</option>
+                        </select>
+                    </div>
+
+                    <div class="view-toggle">
+                        <button class="view-btn active" id="cardViewBtn" title="Card View">
+                            <span class="icon">📋</span>
+                        </button>
+                        <button class="view-btn" id="listViewBtn" title="List View">
+                            <span class="icon">📝</span>
+                        </button>
+                        <button class="view-btn" id="kanbanViewBtn" title="Kanban View">
+                            <span class="icon">📊</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Task Content -->
+            <section class="task-content">
+                <div class="content-header">
+                    <div class="content-title">
+                        <h2 id="currentViewTitle">All Tasks</h2>
+                        <span class="task-count" id="taskCount">0 tasks</span>
+                    </div>
+                    
+                    <div class="content-actions">
+                        <button class="btn btn-ghost" id="selectAllBtn">Select All</button>
+                        <button class="btn btn-ghost" id="bulkActionsBtn" disabled>
+                            Bulk Actions
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task Container -->
+                <div class="task-container" id="taskContainer">
+                    <!-- Tasks will be dynamically inserted here -->
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-icon">📝</div>
+                        <h3>No tasks found</h3>
+                        <p>Create your first task to get started with organizing your work.</p>
+                        <button class="btn btn-primary" id="createFirstTaskBtn">
+                            <span class="icon">➕</span>
+                            Create First Task
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Loading tasks...</p>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination" style="display: none;">
+                    <button class="pagination-btn" id="prevPageBtn" disabled>← Previous</button>
+                    <div class="pagination-info">
+                        <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                    </div>
+                    <button class="pagination-btn" id="nextPageBtn" disabled>Next →</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Task Form Modal -->
+    <div class="modal" id="taskModal" style="display: none;">
+        <div class="modal-backdrop" id="modalBackdrop"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Task</h2>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            
+            <form class="task-form" id="taskForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskTitle" class="form-label">Task Title *</label>
+                        <input type="text" id="taskTitle" class="form-input" required 
+                               placeholder="Enter task title...">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskDescription" class="form-label">Description</label>
+                        <textarea id="taskDescription" class="form-textarea" rows="3" 
+                                  placeholder="Describe your task..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row form-row-2">
+                    <div class="form-group">
+                        <label for="taskType" class="form-label">Task Type *</label>
+                        <select id="taskType" class="form-select" required>
+                            <option value="">Select type...</option>
+                            <option value="work">🏢 Work</option>
+                            <option value="personal">👤 Personal</option>
+                            <option value="project">📂 Project</option>
+                            <option value="reminder">⏰ Reminder</option>
+                            <option value="meeting">👥 Meeting</option>
+                            <option value="goal">🎯 Goal</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskPriority" class="form-label">Priority *</label>
+                        <select id="taskPriority" class="form-select" required>
+                            <option value="medium">Medium Priority</option>
+                            <option value="high">🔴 High Priority</option>
+                            <option value="low">🟢 Low Priority</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row form-row-2">
+                    <div class="form-group">
+                        <label for="taskDueDate" class="form-label">Due Date</label>
+                        <input type="date" id="taskDueDate" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskDueTime" class="form-label">Due Time</label>
+                        <input type="time" id="taskDueTime" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskTags" class="form-label">Tags</label>
+                        <input type="text" id="taskTags" class="form-input" 
+                               placeholder="Enter tags separated by commas...">
+                        <small class="form-help">Example: urgent, client-work, personal</small>
+                    </div>
+                </div>
+
+                <!-- Advanced Options -->
+                <details class="form-advanced">
+                    <summary class="form-advanced-toggle">Advanced Options</summary>
+                    
+                    <div class="form-row form-row-2">
+                        <div class="form-group">
+                            <label for="taskEstimate" class="form-label">Time Estimate</label>
+                            <select id="taskEstimate" class="form-select">
+                                <option value="">No estimate</option>
+                                <option value="15">15 minutes</option>
+                                <option value="30">30 minutes</option>
+                                <option value="60">1 hour</option>
+                                <option value="120">2 hours</option>
+                                <option value="240">4 hours</option>
+                                <option value="480">8 hours (Full day)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="taskProgress" class="form-label">Progress</label>
+                            <input type="range" id="taskProgress" class="form-range" 
+                                   min="0" max="100" value="0">
+                            <output id="progressValue">0%</output>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskNotes" class="form-label">Additional Notes</label>
+                            <textarea id="taskNotes" class="form-textarea" rows="2" 
+                                      placeholder="Any additional notes or context..."></textarea>
+                        </div>
+                    </div>
+                </details>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelTaskBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveTaskBtn">
+                        <span class="icon">💾</span>
+                        Save Task
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Modal -->
+    <div class="modal" id="bulkActionsModal" style="display: none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container modal-small">
+            <div class="modal-header">
+                <h3>Bulk Actions</h3>
+                <button class="modal-close">✕</button>
+            </div>
+            <div class="bulk-actions">
+                <button class="bulk-action-btn" id="bulkMarkComplete">
+                    <span class="icon">✅</span>
+                    Mark as Complete
+                </button>
+                <button class="bulk-action-btn" id="bulkMarkPending">
+                    <span class="icon">⏳</span>
+                    Mark as Pending
+                </button>
+                <button class="bulk-action-btn" id="bulkChangePriority">
+                    <span class="icon">🔶</span>
+                    Change Priority
+                </button>
+                <button class="bulk-action-btn danger" id="bulkDelete">
+                    <span class="icon">🗑️</span>
+                    Delete Tasks
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- JavaScript Architecture -->
+    <script type="module" src="js/utils/constants.js"></script>
+    <script type="module" src="js/utils/helpers.js"></script>
+    <script type="module" src="js/utils/validators.js"></script>
+    <script type="module" src="js/models/Task.js"></script>
+    <script type="module" src="js/models/WorkTask.js"></script>
+    <script type="module" src="js/models/PersonalTask.js"></script>
+    <script type="module" src="js/models/ProjectTask.js"></script>
+    <script type="module" src="js/models/TaskFactory.js"></script>
+    <script type="module" src="js/repositories/TaskRepository.js"></script>
+    <script type="module" src="js/services/StorageService.js"></script>
+    <script type="module" src="js/services/ValidationService.js"></script>
+    <script type="module" src="js/services/NotificationService.js"></script>
+    <script type="module" src="js/services/TaskService.js"></script>
+    <script type="module" src="js/controllers/TaskController.js"></script>
+    <script type="module" src="js/controllers/FilterController.js"></script>
+    <script type="module" src="js/views/TaskView.js"></script>
+    <script type="module" src="js/views/StatsView.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

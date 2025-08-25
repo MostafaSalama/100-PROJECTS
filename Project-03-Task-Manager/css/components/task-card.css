@@ -1,0 +1,485 @@
+/* 
+ * task-card.css - Task Card Component Styles
+ * 
+ * Styles for task cards in different view modes (card, list, kanban).
+ * Includes animations, states, and interactive elements.
+ */
+
+/* ===== TASK CARD BASE STYLES ===== */
+.task-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-5);
+    margin-bottom: var(--spacing-4);
+    position: relative;
+    transition: all var(--transition-base);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.task-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.task-card:hover::before {
+    opacity: 1;
+}
+
+/* Task Card States */
+.task-card.selected {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+}
+
+.task-card.completed {
+    opacity: 0.75;
+}
+
+.task-card.completed .task-title {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.task-card.overdue {
+    border-left: 4px solid var(--error-color);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.task-card.high-priority {
+    border-left: 4px solid var(--error-color);
+}
+
+.task-card.medium-priority {
+    border-left: 4px solid var(--warning-color);
+}
+
+.task-card.low-priority {
+    border-left: 4px solid var(--success-color);
+}
+
+/* ===== TASK CARD HEADER ===== */
+.task-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-3);
+    gap: var(--spacing-3);
+}
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-base);
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.task-checkbox:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+}
+
+.task-checkbox.checked {
+    background: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.task-checkbox.checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.task-main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.task-card:hover .task-actions {
+    opacity: 1;
+}
+
+.task-action-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-base);
+    padding: var(--spacing-1) var(--spacing-2);
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: var(--font-size-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.task-action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* ===== TASK CARD CONTENT ===== */
+.task-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-inverse);
+    margin: 0 0 var(--spacing-2) 0;
+    line-height: var(--line-height-tight);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.task-description {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.8);
+    line-height: var(--line-height-normal);
+    margin-bottom: var(--spacing-3);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.task-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding: var(--spacing-1) var(--spacing-2);
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-3);
+}
+
+.task-type-icon {
+    font-size: 14px;
+}
+
+/* ===== TASK PROGRESS BAR ===== */
+.task-progress {
+    margin: var(--spacing-3) 0;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-1);
+}
+
+.progress-label {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: var(--font-weight-medium);
+}
+
+.progress-percentage {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: var(--font-weight-semibold);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-full);
+    transition: width var(--transition-slow);
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: progressShimmer 2s ease-in-out infinite;
+}
+
+@keyframes progressShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ===== TASK METADATA ===== */
+.task-metadata {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--spacing-4);
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.task-meta-left,
+.task-meta-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.task-due-date {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.task-due-date.overdue {
+    color: var(--error-light);
+}
+
+.task-due-date.due-today {
+    color: var(--warning-light);
+}
+
+.task-due-date.due-soon {
+    color: var(--info-light);
+}
+
+.task-created-date {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+/* ===== TASK TAGS ===== */
+.task-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-1);
+    margin-top: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
+}
+
+.task-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-1) var(--spacing-2);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.9);
+    transition: all var(--transition-fast);
+}
+
+.task-tag:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+/* ===== LIST VIEW STYLES ===== */
+.task-list-view .task-card {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-2);
+    border-radius: var(--radius-lg);
+}
+
+.task-list-view .task-card-header {
+    margin-bottom: 0;
+    flex: 1;
+}
+
+.task-list-view .task-main-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    flex: 1;
+}
+
+.task-list-view .task-title {
+    margin-bottom: 0;
+    font-size: var(--font-size-base);
+    flex: 1;
+}
+
+.task-list-view .task-description {
+    display: none;
+}
+
+.task-list-view .task-metadata {
+    margin-top: 0;
+    margin-left: var(--spacing-4);
+}
+
+.task-list-view .task-tags {
+    margin: 0;
+    margin-left: var(--spacing-4);
+}
+
+.task-list-view .task-progress {
+    width: 100px;
+    margin: 0;
+    margin-left: var(--spacing-4);
+}
+
+/* ===== KANBAN CARD STYLES ===== */
+.kanban-column .task-card {
+    margin-bottom: var(--spacing-3);
+    cursor: grab;
+}
+
+.kanban-column .task-card:active {
+    cursor: grabbing;
+}
+
+.kanban-column .task-card.dragging {
+    transform: rotate(5deg);
+    opacity: 0.8;
+    z-index: 1000;
+}
+
+/* ===== COMPACT VIEW ===== */
+.task-card.compact {
+    padding: var(--spacing-3);
+}
+
+.task-card.compact .task-title {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-1);
+}
+
+.task-card.compact .task-description {
+    -webkit-line-clamp: 2;
+}
+
+.task-card.compact .task-metadata {
+    margin-top: var(--spacing-2);
+}
+
+/* ===== ANIMATIONS ===== */
+.task-card-enter {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+}
+
+.task-card-enter-active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: all var(--transition-slow);
+}
+
+.task-card-exit {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.task-card-exit-active {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all var(--transition-base);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .task-card {
+        padding: var(--spacing-4);
+    }
+    
+    .task-title {
+        font-size: var(--font-size-base);
+    }
+    
+    .task-actions {
+        opacity: 1;
+    }
+    
+    .task-metadata {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-2);
+    }
+    
+    .task-meta-left,
+    .task-meta-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .task-list-view .task-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .task-list-view .task-main-content {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-2);
+    }
+    
+    .task-list-view .task-metadata,
+    .task-list-view .task-tags,
+    .task-list-view .task-progress {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .task-card {
+        padding: var(--spacing-3);
+    }
+    
+    .task-tags {
+        gap: var(--spacing-1);
+    }
+    
+    .task-tag {
+        font-size: 10px;
+        padding: 2px var(--spacing-1);
+    }
+}
