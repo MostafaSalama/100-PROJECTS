@@ -1,0 +1,144 @@
+/* 
+ * filters.css - Filter and Search Component Styles
+ * 
+ * Styles for sidebar filters, search input, and filter controls.
+ */
+
+/* ===== FILTER GROUPS ===== */
+.filter-group {
+    margin-bottom: var(--spacing-4);
+}
+
+.filter-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-2);
+    display: block;
+}
+
+/* ===== SEARCH CONTAINER ===== */
+.search-container {
+    position: relative;
+    margin-bottom: var(--spacing-2);
+}
+
+.search-input {
+    width: 100%;
+    padding: var(--spacing-3) var(--spacing-10) var(--spacing-3) var(--spacing-4);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-lg);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--font-size-base);
+    transition: all var(--transition-fast);
+}
+
+.search-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-icon {
+    position: absolute;
+    right: var(--spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+}
+
+/* ===== FILTER SELECTS ===== */
+.filter-select {
+    width: 100%;
+    padding: var(--spacing-3);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-lg);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.filter-select:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.filter-select option {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: var(--spacing-2);
+}
+
+/* ===== VIEW TOGGLE ===== */
+.view-toggle {
+    display: flex;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-4);
+}
+
+.view-btn {
+    flex: 1;
+    padding: var(--spacing-3);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-lg);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.view-btn.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.view-btn .icon {
+    font-size: var(--font-size-lg);
+}
+
+/* ===== CLEAR FILTERS BUTTON ===== */
+.btn-full-width {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .filter-group {
+        margin-bottom: var(--spacing-3);
+    }
+    
+    .view-toggle {
+        margin-top: var(--spacing-3);
+    }
+    
+    .search-input {
+        padding: var(--spacing-2) var(--spacing-8) var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-sm);
+    }
+    
+    .filter-select {
+        padding: var(--spacing-2);
+        font-size: var(--font-size-sm);
+    }
+}

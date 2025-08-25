@@ -230,7 +230,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="taskTitle" class="form-label">Task Title *</label>
-                        <input type="text" id="taskTitle" class="form-input" required 
+                        <input type="text" id="taskTitle" name="taskTitle" class="form-input" required 
                                placeholder="Enter task title...">
                     </div>
                 </div>
@@ -238,7 +238,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="taskDescription" class="form-label">Description</label>
-                        <textarea id="taskDescription" class="form-textarea" rows="3" 
+                        <textarea id="taskDescription" name="taskDescription" class="form-textarea" rows="3" 
                                   placeholder="Describe your task..."></textarea>
                     </div>
                 </div>
@@ -246,9 +246,9 @@
                 <div class="form-row form-row-2">
                     <div class="form-group">
                         <label for="taskType" class="form-label">Task Type *</label>
-                        <select id="taskType" class="form-select" required>
+                        <select id="taskType" name="taskType" class="form-select" required>
                             <option value="">Select type...</option>
-                            <option value="work">🏢 Work</option>
+                            <option value="work" selected>🏢 Work</option>
                             <option value="personal">👤 Personal</option>
                             <option value="project">📂 Project</option>
                             <option value="reminder">⏰ Reminder</option>
@@ -259,7 +259,7 @@
                     
                     <div class="form-group">
                         <label for="taskPriority" class="form-label">Priority *</label>
-                        <select id="taskPriority" class="form-select" required>
+                        <select id="taskPriority" name="taskPriority" class="form-select" required>
                             <option value="medium">Medium Priority</option>
                             <option value="high">🔴 High Priority</option>
                             <option value="low">🟢 Low Priority</option>
@@ -270,19 +270,19 @@
                 <div class="form-row form-row-2">
                     <div class="form-group">
                         <label for="taskDueDate" class="form-label">Due Date</label>
-                        <input type="date" id="taskDueDate" class="form-input">
+                        <input type="date" id="taskDueDate" name="taskDueDate" class="form-input">
                     </div>
                     
                     <div class="form-group">
                         <label for="taskDueTime" class="form-label">Due Time</label>
-                        <input type="time" id="taskDueTime" class="form-input">
+                        <input type="time" id="taskDueTime" name="taskDueTime" class="form-input">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="taskTags" class="form-label">Tags</label>
-                        <input type="text" id="taskTags" class="form-input" 
+                        <input type="text" id="taskTags" name="taskTags" class="form-input" 
                                placeholder="Enter tags separated by commas...">
                         <small class="form-help">Example: urgent, client-work, personal</small>
                     </div>
@@ -295,7 +295,7 @@
                     <div class="form-row form-row-2">
                         <div class="form-group">
                             <label for="taskEstimate" class="form-label">Time Estimate</label>
-                            <select id="taskEstimate" class="form-select">
+                            <select id="taskEstimate" name="taskEstimate" class="form-select">
                                 <option value="">No estimate</option>
                                 <option value="15">15 minutes</option>
                                 <option value="30">30 minutes</option>
@@ -308,7 +308,7 @@
                         
                         <div class="form-group">
                             <label for="taskProgress" class="form-label">Progress</label>
-                            <input type="range" id="taskProgress" class="form-range" 
+                            <input type="range" id="taskProgress" name="taskProgress" class="form-range" 
                                    min="0" max="100" value="0">
                             <output id="progressValue">0%</output>
                         </div>
@@ -317,7 +317,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="taskNotes" class="form-label">Additional Notes</label>
-                            <textarea id="taskNotes" class="form-textarea" rows="2" 
+                            <textarea id="taskNotes" name="taskNotes" class="form-textarea" rows="2" 
                                       placeholder="Any additional notes or context..."></textarea>
                         </div>
                     </div>
@@ -379,7 +379,7 @@
     <script type="module" src="js/services/StorageService.js"></script>
     <script type="module" src="js/services/ValidationService.js"></script>
     <script type="module" src="js/services/NotificationService.js"></script>
-    <script type="module" src="js/services/TaskService.js"></script>
+
     <script type="module" src="js/controllers/TaskController.js"></script>
     <script type="module" src="js/controllers/FilterController.js"></script>
     <script type="module" src="js/views/TaskView.js"></script>

@@ -29,11 +29,11 @@ export class Task {
         this.priority = data.priority || 'medium';
         this.status = data.status || 'pending';
 
-        // Temporal properties
-        this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
-        this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
-        this.dueDate = data.dueDate ? new Date(data.dueDate) : null;
-        this.completedAt = data.completedAt ? new Date(data.completedAt) : null;
+        // Temporal properties - ensure they are always valid Date objects
+        this.createdAt = this.parseDate(data.createdAt) || new Date();
+        this.updatedAt = this.parseDate(data.updatedAt) || new Date();
+        this.dueDate = data.dueDate ? this.parseDate(data.dueDate) : null;
+        this.completedAt = data.completedAt ? this.parseDate(data.completedAt) : null;
 
         // Progress and tracking
         this.progress = Math.max(0, Math.min(100, data.progress || 0));
@@ -63,6 +63,37 @@ export class Task {
         const timestamp = Date.now().toString(36);
         const randomStr = Math.random().toString(36).substring(2, 8);
         return `task_${timestamp}_${randomStr}`;
+    }
+
+    /**
+     * Safely parse date value
+     * @param {string|Date|null} dateValue - Date value to parse
+     * @returns {Date|null} Parsed Date object or null
+     */
+    parseDate(dateValue) {
+        if (!dateValue) return null;
+        
+        // If already a Date object, validate and return it
+        if (dateValue instanceof Date) {
+            if (isNaN(dateValue.getTime())) {
+                console.warn('Invalid Date object encountered:', dateValue);
+                return null;
+            }
+            return dateValue;
+        }
+        
+        // Try to parse string or number
+        try {
+            const date = new Date(dateValue);
+            if (isNaN(date.getTime())) {
+                console.warn('Failed to parse date value:', dateValue);
+                return null;
+            }
+            return date;
+        } catch (error) {
+            console.warn('Exception while parsing date:', dateValue, error);
+            return null;
+        }
     }
 
     /**
@@ -295,6 +326,9 @@ export class Task {
      * @returns {Object} Plain object representation
      */
     toObject() {
+        // Ensure dates are properly formatted before serialization
+        this.ensureDateObjects();
+        
         return {
             id: this.id,
             title: this.title,
@@ -302,10 +336,10 @@ export class Task {
             type: this.type,
             priority: this.priority,
             status: this.status,
-            createdAt: this.createdAt.toISOString(),
-            updatedAt: this.updatedAt.toISOString(),
-            dueDate: this.dueDate ? this.dueDate.toISOString() : null,
-            completedAt: this.completedAt ? this.completedAt.toISOString() : null,
+            createdAt: this.safeToISOString(this.createdAt),
+            updatedAt: this.safeToISOString(this.updatedAt),
+            dueDate: this.safeToISOString(this.dueDate),
+            completedAt: this.safeToISOString(this.completedAt),
             progress: this.progress,
             estimatedMinutes: this.estimatedMinutes,
             actualMinutes: this.actualMinutes,
@@ -317,6 +351,45 @@ export class Task {
             subtasks: [...this.subtasks],
             attachments: [...this.attachments]
         };
+    }
+
+    /**
+     * Safely convert date to ISO string
+     * @param {Date|string|null} date - Date to convert
+     * @returns {string|null} ISO string or null
+     */
+    safeToISOString(date) {
+        if (!date) return null;
+        
+        // If it's already a string, assume it's valid ISO format
+        if (typeof date === 'string') return date;
+        
+        // If it's a Date object, call toISOString
+        if (date instanceof Date && !isNaN(date.getTime())) {
+            return date.toISOString();
+        }
+        
+        // Try to parse it
+        try {
+            const parsedDate = new Date(date);
+            if (!isNaN(parsedDate.getTime())) {
+                return parsedDate.toISOString();
+            }
+        } catch (error) {
+            console.warn('Failed to convert date to ISO string:', date);
+        }
+        
+        return null;
+    }
+
+    /**
+     * Ensure all date properties are Date objects
+     */
+    ensureDateObjects() {
+        this.createdAt = this.parseDate(this.createdAt) || new Date();
+        this.updatedAt = this.parseDate(this.updatedAt) || new Date();
+        this.dueDate = this.dueDate ? this.parseDate(this.dueDate) : null;
+        this.completedAt = this.completedAt ? this.parseDate(this.completedAt) : null;
     }
 
     /**

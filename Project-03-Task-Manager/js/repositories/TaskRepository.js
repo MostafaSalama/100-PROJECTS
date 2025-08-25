@@ -115,10 +115,15 @@ export class TaskRepository {
         }
 
         try {
-            // Apply updates to task
+            // Apply updates to task with proper date handling
             Object.keys(updates).forEach(key => {
                 if (key !== 'id') { // Prevent ID changes
-                    task[key] = updates[key];
+                    if (this.isDateField(key) && updates[key]) {
+                        // Parse date fields properly
+                        task[key] = task.parseDate(updates[key]);
+                    } else {
+                        task[key] = updates[key];
+                    }
                 }
             });
 
@@ -593,6 +598,16 @@ export class TaskRepository {
         }
 
         return health;
+    }
+
+    /**
+     * Check if a field is a date field
+     * @param {string} fieldName - Field name to check
+     * @returns {boolean} True if field is a date field
+     */
+    isDateField(fieldName) {
+        const dateFields = ['createdAt', 'updatedAt', 'dueDate', 'completedAt'];
+        return dateFields.includes(fieldName);
     }
 }
 

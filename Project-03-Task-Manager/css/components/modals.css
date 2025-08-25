@@ -1,0 +1,240 @@
+/* 
+ * modals.css - Modal and Dialog Component Styles
+ * 
+ * Additional modal styles and enhancements beyond task-form.css
+ */
+
+/* ===== MODAL ANIMATIONS ===== */
+.modal {
+    animation: modalFadeIn var(--transition-base) ease-out;
+}
+
+.modal.active .modal-container {
+    animation: modalSlideIn var(--transition-base) ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ===== CONFIRMATION MODALS ===== */
+.modal-confirmation {
+    max-width: 400px;
+}
+
+.modal-confirmation .modal-header {
+    background: var(--gradient-warning);
+}
+
+.modal-confirmation .modal-content {
+    text-align: center;
+    padding: var(--spacing-6);
+}
+
+.modal-confirmation .confirmation-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-4);
+}
+
+.modal-confirmation .confirmation-message {
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-6);
+}
+
+.modal-confirmation .modal-footer {
+    justify-content: center;
+    gap: var(--spacing-4);
+}
+
+/* ===== ERROR MODALS ===== */
+.modal-error .modal-header {
+    background: var(--gradient-error);
+}
+
+.modal-error .error-icon {
+    color: var(--error-color);
+    font-size: 2rem;
+    margin-right: var(--spacing-2);
+}
+
+/* ===== SUCCESS MODALS ===== */
+.modal-success .modal-header {
+    background: var(--gradient-success);
+}
+
+.modal-success .success-icon {
+    color: var(--success-color);
+    font-size: 2rem;
+    margin-right: var(--spacing-2);
+}
+
+/* ===== MODAL OVERLAY EFFECTS ===== */
+.modal-backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+/* ===== MODAL CONTENT TYPES ===== */
+.modal-content-list {
+    padding: 0;
+}
+
+.modal-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3) var(--spacing-4);
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.modal-list-item:hover {
+    background: var(--bg-secondary);
+}
+
+.modal-list-item:last-child {
+    border-bottom: none;
+}
+
+.modal-list-icon {
+    font-size: var(--font-size-lg);
+    width: 24px;
+    text-align: center;
+}
+
+.modal-list-text {
+    flex: 1;
+}
+
+.modal-list-title {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-1);
+}
+
+.modal-list-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+/* ===== MODAL LOADING STATES ===== */
+.modal-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-8);
+}
+
+.modal-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-light);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-4);
+}
+
+.modal-loading-text {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* ===== MODAL PROGRESS ===== */
+.modal-progress {
+    padding: var(--spacing-4);
+}
+
+.modal-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-light);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--spacing-3);
+}
+
+.modal-progress-fill {
+    height: 100%;
+    background: var(--primary-color);
+    transition: width var(--transition-base);
+    border-radius: var(--radius-full);
+}
+
+.modal-progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+/* ===== KEYBOARD NAVIGATION ===== */
+.modal:focus-within {
+    outline: none;
+}
+
+.modal-container:focus-within {
+    border: 2px solid var(--primary-color);
+}
+
+/* ===== RESPONSIVE MODAL ADJUSTMENTS ===== */
+@media (max-width: 480px) {
+    .modal-confirmation {
+        margin: var(--spacing-2);
+    }
+    
+    .modal-confirmation .modal-content {
+        padding: var(--spacing-4);
+    }
+    
+    .modal-confirmation .confirmation-icon {
+        font-size: 2.5rem;
+    }
+    
+    .modal-confirmation .confirmation-message {
+        font-size: var(--font-size-base);
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+    .modal,
+    .modal.active .modal-container {
+        animation: none;
+    }
+    
+    .modal-spinner {
+        animation: none;
+        border-top-color: var(--primary-color);
+    }
+}
+
+/* ===== HIGH CONTRAST MODE ===== */
+@media (prefers-contrast: high) {
+    .modal-backdrop {
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: none;
+    }
+    
+    .modal-container {
+        border: 2px solid var(--text-primary);
+    }
+}
