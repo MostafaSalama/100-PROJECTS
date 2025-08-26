@@ -69,8 +69,7 @@ export class TaskController {
      * Setup event listeners for UI interactions
      */
     setupEventListeners() {
-        // Task form submission - listen for both event patterns
-        this.addEventListener('taskFormSubmit', this.handleTaskFormSubmit.bind(this));
+        // Task form submission - listen for app events only
         this.addEventListener('task:taskFormSubmit', this.handleTaskFormSubmit.bind(this));
         
         // Task actions
@@ -91,7 +90,7 @@ export class TaskController {
         this.addEventListener('taskSelect', this.handleTaskSelection.bind(this));
         this.addEventListener('selectAll', this.handleSelectAll.bind(this));
         
-        // Repository events
+        // Repository events - handle low-level data changes
         this.taskRepository.addEventListener('taskCreated', this.onTaskCreated.bind(this));
         this.taskRepository.addEventListener('taskUpdated', this.onTaskUpdated.bind(this));
         this.taskRepository.addEventListener('taskDeleted', this.onTaskDeleted.bind(this));
@@ -135,8 +134,7 @@ export class TaskController {
             await this.loadAndRenderTasks();
             this.updateStatistics();
             
-            this.emit('taskCreated', { task });
-            
+            // Repository already emitted taskCreated event
             return { success: true, task };
             
         } catch (error) {
@@ -170,14 +168,14 @@ export class TaskController {
 
             // Update task
             const updatedTask = await this.taskRepository.update(taskId, validation.sanitizedData);
-            
+
             this.notificationService.success(`Task "${updatedTask.title}" updated successfully!`);
             
             // Refresh UI
             await this.loadAndRenderTasks();
             this.updateStatistics();
             
-            this.emit('taskUpdated', { task: updatedTask });
+            // this.emit('taskUpdated', { task: updatedTask });
             
             return { success: true, task: updatedTask };
             
@@ -213,8 +211,7 @@ export class TaskController {
                 await this.loadAndRenderTasks();
                 this.updateStatistics();
                 
-                this.emit('taskDeleted', { taskId, taskTitle });
-                
+                // Repository already emitted taskDeleted event
                 return { success: true };
             } else {
                 throw new Error('Delete operation failed');
@@ -255,8 +252,7 @@ export class TaskController {
             await this.loadAndRenderTasks();
             this.updateStatistics();
             
-            this.emit('taskCompleted', { task: updatedTask });
-            
+            // Repository already emitted taskUpdated event
             return { success: true, task: updatedTask };
             
         } catch (error) {
@@ -298,8 +294,7 @@ export class TaskController {
             await this.loadAndRenderTasks();
             this.updateStatistics();
             
-            this.emit('taskDuplicated', { original: originalTask, duplicate: duplicateTask });
-            
+            // Repository already emitted taskCreated event for the duplicate
             return { success: true, task: duplicateTask };
             
         } catch (error) {
@@ -740,16 +735,46 @@ export class TaskController {
 
     // ===== REPOSITORY EVENT HANDLERS =====
 
+    /**
+     * Handle task created event from repository
+     * @param {Object} data - Event data from repository
+     */
     onTaskCreated(data) {
         console.log('Task created:', data.task.title);
+        
+        // Emit window event for app-level handling
+        const customEvent = new CustomEvent('taskController:taskCreated', {
+            detail: { task: data.task, timestamp: new Date().toISOString() }
+        });
+        window.dispatchEvent(customEvent);
     }
 
+    /**
+     * Handle task updated event from repository
+     * @param {Object} data - Event data from repository
+     */
     onTaskUpdated(data) {
         console.log('Task updated:', data.task.title);
+        
+        // Emit window event for app-level handling
+        const customEvent = new CustomEvent('taskController:taskUpdated', {
+            detail: { task: data.task, updates: data.updates, timestamp: new Date().toISOString() }
+        });
+        window.dispatchEvent(customEvent);
     }
 
+    /**
+     * Handle task deleted event from repository
+     * @param {Object} data - Event data from repository
+     */
     onTaskDeleted(data) {
         console.log('Task deleted:', data.task.title);
+        
+        // Emit window event for app-level handling
+        const customEvent = new CustomEvent('taskController:taskDeleted', {
+            detail: { task: data.task, timestamp: new Date().toISOString() }
+        });
+        window.dispatchEvent(customEvent);
     }
 
     onTasksSaved(event) {

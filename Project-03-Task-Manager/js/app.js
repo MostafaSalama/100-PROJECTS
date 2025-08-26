@@ -19,7 +19,7 @@ class TaskMasterApp {
         this.controllers = {};
         this.views = {};
         this.isInitialized = false;
-        this.debugMode = false; // Set to true for debug logging
+        this.debugMode = true; // Set to true for debug logging - verify single events
         
         // Application state
         this.appState = {
@@ -133,10 +133,10 @@ class TaskMasterApp {
         // Task controller events
         window.addEventListener('taskController:openTaskForm', this.handleOpenTaskForm.bind(this));
         
-        // Custom application events
-        window.addEventListener('taskCreated', this.handleTaskCreated.bind(this));
-        window.addEventListener('taskUpdated', this.handleTaskUpdated.bind(this));
-        window.addEventListener('taskDeleted', this.handleTaskDeleted.bind(this));
+        // Repository events (single source of truth)
+        window.addEventListener('taskController:taskCreated', this.handleTaskCreated.bind(this));
+        window.addEventListener('taskController:taskUpdated', this.handleTaskUpdated.bind(this));
+        window.addEventListener('taskController:taskDeleted', this.handleTaskDeleted.bind(this));
     }
 
     /**
