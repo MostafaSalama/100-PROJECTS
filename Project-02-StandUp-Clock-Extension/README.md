@@ -395,6 +395,9 @@ Install the **StandUp Clock extension** and start building healthier work habits
 
 **Remember**: Small changes lead to big improvements. Every stand-up counts! 💪
 
+
+☕ **[Buy me a coffee](https://buymeacoffee.com/mostafatourad)** - One-time support  
+🎯 **[Become a patron](https://www.patreon.com/MostafaTourad)** - Monthly support for ongoing updates
 ---
 
 **Happy Coding & Healthy Working! 🎉**
