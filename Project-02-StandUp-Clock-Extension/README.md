@@ -3,7 +3,7 @@
 **Project 02** of 100 Days Projects Series
 
 A beautiful Chrome extension that combines a digital clock with intelligent stand-up reminders to promote better health and productivity during work hours.
-
+# [Install it now ](https://chromewebstore.google.com/detail/standup-clock-health-remi/nbiednbpbmooeeihmeodnlkkgfanfngo)
 ![Extension Preview](./preview-screenshot.png)
 
 ## 🌟 Features
