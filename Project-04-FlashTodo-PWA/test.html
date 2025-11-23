@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashTodo Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            background: #1a1a2e;
+            color: white;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .success { background: rgba(79, 172, 254, 0.2); border-color: #4facfe; }
+        .error { background: rgba(255, 107, 107, 0.2); border-color: #ff6b6b; }
+        .info { background: rgba(102, 126, 234, 0.2); border-color: #667eea; }
+    </style>
+</head>
+<body>
+    <h1>🧪 FlashTodo Module Test</h1>
+    <div id="results"></div>
+
+    <script type="module">
+        const results = document.getElementById('results');
+        
+        function addResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+        
+        try {
+            // Test constants import
+            const constants = await import('./js/utils/constants.js');
+            addResult('✅ Constants module loaded successfully', 'success');
+            addResult(`App info: ${constants.APP_INFO.NAME} v${constants.APP_INFO.VERSION}`, 'info');
+            
+            // Test services
+            const { default: StorageService } = await import('./js/services/StorageService.js');
+            const { default: PWAService } = await import('./js/services/PWAService.js');
+            addResult('✅ Services loaded successfully', 'success');
+            
+            // Test components
+            const { default: FlashCard } = await import('./js/components/FlashCard.js');
+            const { default: FolderManager } = await import('./js/components/FolderManager.js');
+            const { default: FilterManager } = await import('./js/components/FilterManager.js');
+            addResult('✅ Components loaded successfully', 'success');
+            
+            // Test main app
+            const { default: FlashTodoApp } = await import('./js/app.js');
+            addResult('✅ Main app module loaded successfully', 'success');
+            
+            // Test instantiation
+            const storageService = new StorageService();
+            addResult('✅ StorageService instantiated', 'success');
+            
+            const pwaService = new PWAService();
+            addResult('✅ PWAService instantiated', 'success');
+            
+            addResult('🎉 All modules loaded and working correctly!', 'success');
+            
+        } catch (error) {
+            addResult(`❌ Error: ${error.message}`, 'error');
+            console.error('Module test error:', error);
+        }
+    </script>
+</body>
+</html>
+

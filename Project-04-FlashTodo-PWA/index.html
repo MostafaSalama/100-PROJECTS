@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FlashTodo - Color-coded flash card todo app with folders and filters">
+    <meta name="theme-color" content="#667eea">
+    
+    <title>FlashTodo - Flash Card Todo App</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" href="icons/favicon.ico">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/flash-cards.css">
+    <link rel="stylesheet" href="css/folders.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- PWA Install Banner -->
+    <div id="install-banner" class="install-banner hidden">
+        <div class="install-content">
+            <div class="install-icon">📱</div>
+            <div class="install-text">
+                <h3>Install FlashTodo</h3>
+                <p>Get quick access and work offline!</p>
+            </div>
+            <button id="install-btn" class="install-btn">Install</button>
+            <button id="install-dismiss" class="install-dismiss">✕</button>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="app-logo">
+                    <span class="logo-icon">🗂️</span>
+                    <h1 class="app-title">FlashTodo</h1>
+                    <span class="app-subtitle">Flash Card Todos</span>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="filter-btn" title="Filters">
+                        <span class="icon">🔍</span>
+                        Filters
+                    </button>
+                    <button class="btn btn-secondary" id="folder-btn" title="Manage Folders">
+                        <span class="icon">📁</span>
+                        Folders
+                    </button>
+                    <button class="btn btn-primary" id="add-todo-btn">
+                        <span class="icon">➕</span>
+                        Add Todo
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Folders Section -->
+                <div class="sidebar-section">
+                    <h3 class="section-title">
+                        <span class="icon">📁</span>
+                        Folders
+                    </h3>
+                    <div class="folder-list" id="folder-list">
+                        <div class="folder-item active" data-folder="all">
+                            <span class="folder-icon">📋</span>
+                            <span class="folder-name">All Todos</span>
+                            <span class="folder-count" id="count-all">0</span>
+                        </div>
+                    </div>
+                    <button class="btn-text" id="add-folder-btn">
+                        <span class="icon">➕</span>
+                        Add Folder
+                    </button>
+                </div>
+
+                <!-- Filters Section -->
+                <div class="sidebar-section">
+                    <h3 class="section-title">
+                        <span class="icon">🔍</span>
+                        Filters
+                    </h3>
+                    <div class="filter-options">
+                        <!-- Status Filters -->
+                        <div class="filter-group">
+                            <h4 class="filter-group-title">Status</h4>
+                            <div class="status-filters">
+                                <button class="status-filter active" data-status="all">
+                                    <span class="status-dot all"></span>
+                                    All
+                                </button>
+                                <button class="status-filter" data-status="todo">
+                                    <span class="status-dot todo"></span>
+                                    Todo
+                                </button>
+                                <button class="status-filter" data-status="progress">
+                                    <span class="status-dot progress"></span>
+                                    In Progress
+                                </button>
+                                <button class="status-filter" data-status="completed">
+                                    <span class="status-dot completed"></span>
+                                    Completed
+                                </button>
+                                <button class="status-filter" data-status="hold">
+                                    <span class="status-dot hold"></span>
+                                    On Hold
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Priority Filters -->
+                        <div class="filter-group">
+                            <h4 class="filter-group-title">Priority</h4>
+                            <div class="priority-filters">
+                                <button class="priority-filter active" data-priority="all">All</button>
+                                <button class="priority-filter" data-priority="high">🔴 High</button>
+                                <button class="priority-filter" data-priority="medium">🟡 Medium</button>
+                                <button class="priority-filter" data-priority="low">🟢 Low</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Todo Cards Area -->
+            <div class="todos-container">
+                <div class="todos-header">
+                    <div class="todos-info">
+                        <h2 id="current-folder-title">All Todos</h2>
+                        <span class="todos-count" id="todos-count">0 todos</span>
+                    </div>
+                    
+                    <div class="view-controls">
+                        <button class="view-btn active" data-view="cards" title="Card View">
+                            <span class="icon">⬜</span>
+                        </button>
+                        <button class="view-btn" data-view="list" title="List View">
+                            <span class="icon">☰</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" 
+                           placeholder="Search todos...">
+                    <span class="search-icon">🔍</span>
+                </div>
+
+                <!-- Flash Cards Grid -->
+                <div class="flash-cards-grid" id="flash-cards-grid">
+                    <!-- Flash cards will be dynamically generated here -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-icon">📝</div>
+                    <h3>No todos yet</h3>
+                    <p>Create your first flash card todo to get started!</p>
+                    <button class="btn btn-primary" onclick="document.getElementById('add-todo-btn').click()">
+                        <span class="icon">➕</span>
+                        Add Your First Todo
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Todo Modal -->
+    <div class="modal" id="todo-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modal-title">Add New Todo</h3>
+                <button class="modal-close" id="modal-close">✕</button>
+            </div>
+            
+            <form class="todo-form" id="todo-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="todo-title" class="form-label">Title *</label>
+                        <input type="text" id="todo-title" name="title" class="form-input" 
+                               placeholder="What needs to be done?" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="todo-description" class="form-label">Description</label>
+                        <textarea id="todo-description" name="description" class="form-textarea" 
+                                  rows="3" placeholder="Add more details..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row form-row-2">
+                    <div class="form-group">
+                        <label for="todo-status" class="form-label">Status *</label>
+                        <select id="todo-status" name="status" class="form-select" required>
+                            <option value="todo">📋 Todo</option>
+                            <option value="progress">🔄 In Progress</option>
+                            <option value="completed">✅ Completed</option>
+                            <option value="hold">⏸️ On Hold</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="todo-priority" class="form-label">Priority</label>
+                        <select id="todo-priority" name="priority" class="form-select">
+                            <option value="low">🟢 Low</option>
+                            <option value="medium" selected>🟡 Medium</option>
+                            <option value="high">🔴 High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="todo-folder" class="form-label">Folder</label>
+                        <select id="todo-folder" name="folder" class="form-select">
+                            <option value="">No folder</option>
+                            <!-- Folders will be populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="todo-tags" class="form-label">Tags</label>
+                        <input type="text" id="todo-tags" name="tags" class="form-input" 
+                               placeholder="work, urgent, personal (comma-separated)">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="todo-due" class="form-label">Due Date</label>
+                        <input type="date" id="todo-due" name="dueDate" class="form-input">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-todo-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="save-todo-btn">
+                        <span class="icon">💾</span>
+                        Save Todo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Folder Modal -->
+    <div class="modal" id="folder-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container modal-small">
+            <div class="modal-header">
+                <h3>Add New Folder</h3>
+                <button class="modal-close">✕</button>
+            </div>
+            
+            <form class="folder-form" id="folder-form">
+                <div class="form-group">
+                    <label for="folder-name" class="form-label">Folder Name *</label>
+                    <input type="text" id="folder-name" name="name" class="form-input" 
+                           placeholder="Enter folder name..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="folder-icon" class="form-label">Icon (emoji)</label>
+                    <input type="text" id="folder-icon" name="icon" class="form-input" 
+                           placeholder="📁" maxlength="2">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Folder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offline-indicator">
+        <span class="offline-icon">📶</span>
+        <span class="offline-text">You're offline</span>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

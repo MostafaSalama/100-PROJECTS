@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashTodo PWA Icon Generator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+        }
+        
+        .icons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .icon-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .icon-item canvas {
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .icon-size {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: transform 0.2s ease;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .generate-btn {
+            display: block;
+            margin: 0 auto 30px auto;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(240, 147, 251, 0.3);
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(240, 147, 251, 0.4);
+        }
+        
+        .info {
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗂️ FlashTodo PWA Icon Generator</h1>
+        
+        <div class="info">
+            <p>Click the button below to generate all required PWA icons for FlashTodo.</p>
+            <p>Icons will be created with the FlashTodo branding and color scheme.</p>
+        </div>
+        
+        <button class="generate-btn" onclick="generateAllIcons()">
+            ✨ Generate PWA Icons
+        </button>
+        
+        <div class="icons-grid" id="iconsGrid"></div>
+    </div>
+
+    <script>
+        const iconSizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        function generateAllIcons() {
+            const grid = document.getElementById('iconsGrid');
+            grid.innerHTML = '';
+            
+            iconSizes.forEach(size => {
+                const canvas = createIcon(size);
+                const item = createIconItem(canvas, size);
+                grid.appendChild(item);
+            });
+            
+            // Also create favicon
+            createFavicon();
+        }
+        
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            
+            // Fill background with gradient
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Add rounded corners effect (for visual appeal)
+            const cornerRadius = size * 0.18;
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, cornerRadius);
+            ctx.fill();
+            
+            // Reset composite operation
+            ctx.globalCompositeOperation = 'source-over';
+            
+            // Re-apply gradient (after clipping)
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, cornerRadius);
+            ctx.fill();
+            
+            // Add card/document icon in the center
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            
+            const iconSize = size * 0.5;
+            const x = (size - iconSize) / 2;
+            const y = (size - iconSize) / 2;
+            
+            // Draw folder/card shape
+            const cardRadius = iconSize * 0.1;
+            ctx.beginPath();
+            ctx.roundRect(x, y, iconSize, iconSize * 0.8, cardRadius);
+            ctx.fill();
+            
+            // Add lines to represent text
+            ctx.fillStyle = '#667eea';
+            const lineHeight = iconSize * 0.08;
+            const lineWidth = iconSize * 0.7;
+            const startY = y + iconSize * 0.25;
+            
+            for (let i = 0; i < 3; i++) {
+                const lineY = startY + i * (lineHeight * 1.5);
+                const currentLineWidth = i === 2 ? lineWidth * 0.6 : lineWidth;
+                ctx.beginPath();
+                ctx.roundRect(x + iconSize * 0.15, lineY, currentLineWidth, lineHeight, lineHeight / 2);
+                ctx.fill();
+            }
+            
+            // Add a small status dot
+            ctx.fillStyle = '#f093fb';
+            const dotSize = size * 0.08;
+            ctx.beginPath();
+            ctx.arc(size - dotSize * 1.5, dotSize * 1.5, dotSize / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            return canvas;
+        }
+        
+        function createIconItem(canvas, size) {
+            const item = document.createElement('div');
+            item.className = 'icon-item';
+            
+            const sizeLabel = document.createElement('div');
+            sizeLabel.className = 'icon-size';
+            sizeLabel.textContent = `${size}x${size}`;
+            
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'download-btn';
+            downloadBtn.textContent = `Download ${size}px`;
+            downloadBtn.onclick = () => downloadIcon(canvas, size);
+            
+            item.appendChild(sizeLabel);
+            item.appendChild(canvas);
+            item.appendChild(downloadBtn);
+            
+            return item;
+        }
+        
+        function downloadIcon(canvas, size) {
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        function createFavicon() {
+            const canvas = createIcon(32);
+            const link = document.createElement('a');
+            link.download = 'favicon.ico';
+            link.href = canvas.toDataURL('image/png');
+            
+            // Create a temporary button for favicon download
+            const btn = document.createElement('button');
+            btn.className = 'download-btn';
+            btn.textContent = 'Download Favicon (32px)';
+            btn.style.display = 'block';
+            btn.style.margin = '20px auto';
+            btn.onclick = () => link.click();
+            
+            document.querySelector('.container').appendChild(btn);
+        }
+        
+        // Polyfill for roundRect if not supported
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
+                if (typeof radius === 'number') {
+                    radius = {tl: radius, tr: radius, br: radius, bl: radius};
+                } else {
+                    radius = {tl: 0, tr: 0, br: 0, bl: 0, ...radius};
+                }
+                
+                this.beginPath();
+                this.moveTo(x + radius.tl, y);
+                this.lineTo(x + width - radius.tr, y);
+                this.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+                this.lineTo(x + width, y + height - radius.br);
+                this.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+                this.lineTo(x + radius.bl, y + height);
+                this.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+                this.lineTo(x, y + radius.tl);
+                this.quadraticCurveTo(x, y, x + radius.tl, y);
+                this.closePath();
+            };
+        }
+    </script>
+</body>
+</html>
